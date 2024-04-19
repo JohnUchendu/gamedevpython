@@ -1,8 +1,5 @@
 import pygame
-WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
 
 class Button:
     def __init__(self, x, y, width, height, text, color, font_size, text_color = BLACK):
@@ -20,5 +17,4 @@ class Button:
         screen.blit(text_surface, text_rect)
 
     def is_clicked(self, pos):
-        print("Started button clicked")
         return self.rect.collidepoint(pos)
