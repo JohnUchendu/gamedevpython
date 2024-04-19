@@ -3,6 +3,9 @@ import sys
 from Button import Button
 from Player.Player import Player
 from GameState.GameState import GameState
+from Challenges.logic_quiz import QuizQuestions
+import random
+
 
 # Define colors
 WHITE = (255, 255, 255)
@@ -25,7 +28,12 @@ player = Player("Player 1")
 name = "Hanson"
 game_state = GameState()
 
+def question():
+    Button(300, 100, 200, 50, "Display Question", BLACK, 30, GREEN).draw(screen)
 
+ # Add a button for displaying questions
+    
+display_question_button = Button(300, 100, 200, 50, "Display Question", BLACK, 30, GREEN)
 
 
 start_button = Button(300, 200, 200, 50, "START", BLACK, 30, GREEN)
@@ -61,9 +69,20 @@ def menu_screen():
         pygame.display.update()
 
 def gameplay():
+     # Add a button for displaying questions
+    display_question_button = Button(300, 100, 200, 50, "Display Question", BLACK, 30, GREEN)
+
+    # Initialize variables for questions and options
+    current_question = None
+    current_options = []
+
+    # Load initial question and options
+    load_question()
+
+
     # Define challenge buttons
     select_level_button = Button(150, 20, 500, 50, "Please Select a level to Play", BLACK, 30, WHITE)
-    logic_button = Button(100, 100, 200, 50, "Leve 1 Logic", BLACK, 30, GREEN)
+    logic_quiz_button = Button(100, 100, 200, 50, "Leve 1 Logic", BLACK, 30, GREEN)
     puzzle_button = Button(100, 200, 200, 50, "Puzzle", BLACK, 30, GREEN)
     quantitative_button = Button(100, 300, 200, 50, "Quantitative", BLACK, 30, GREEN)
     rational_button = Button(100, 400, 200, 50, "Rational", BLACK, 30, GREEN)
@@ -71,6 +90,17 @@ def gameplay():
     spelling_button = Button(500, 200, 200, 50, "Spelling", BLACK, 30, GREEN)
     poem_button = Button(500, 300, 200, 50, "Poem", BLACK, 30, GREEN)
     misc_button = Button(500, 400, 200, 50, "Msic", BLACK, 30, GREEN)
+
+    # Initialize variables for questions and options
+    current_question = None
+    current_options = []
+
+    # Load initial question and options
+    load_question()
+
+    display_question(screen, current_question)
+    display_options(screen, current_options)
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -79,9 +109,16 @@ def gameplay():
             # We are going to add more event handling here for user input in challenges
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
-                if logic_button.is_clicked(mouse_pos):
+                if logic_quiz_button.is_clicked(mouse_pos):
+                    print("You have selected to do logic quiz")
                     # Implement logic challenge
-                    pass
+                     # Draw question and options
+                    # if current_question is not None:
+                    display_question(screen, current_question)
+                    print(current_question)
+                    display_options(screen, current_options)
+                    print(current_options)
+                    
                 elif puzzle_button.is_clicked(mouse_pos):
                     # Implement puzzle challenge
                     pass
@@ -104,7 +141,7 @@ def gameplay():
         # We may draw challenges elements here
          # Draw challenge buttons
         select_level_button.draw(screen)
-        logic_button.draw(screen)
+        logic_quiz_button.draw(screen)
         puzzle_button.draw(screen)
         quantitative_button.draw(screen)
         rational_button.draw(screen)
@@ -120,7 +157,41 @@ def gameplay():
         # back_button = Button(20, 20, 100, 50, "Back", BLACK, 20)
         # back_button.draw(screen)
 
+        #  # Draw question and options
+        # if current_question is not None:
+        #     display_question(screen, current_question)
+        #     display_options(screen, current_options)
+
         pygame.display.update()
+
+# Function to load a question and options
+def load_question():
+    # Load a random question and options
+    global current_question, current_options
+    question_number = random.randint(0,95)
+    current_question, current_options = QuizQuestions.get_question(question_number),  QuizQuestions.get_options(question_number)
+    print(question_number)
+    return [current_question, current_options]
+    
+# Function to display question text
+def display_question(screen, question):
+    print("From display_question")
+    print(load_question()[0])
+    print(load_question()[1])
+    print("All From display_question Function")
+    
+    font = pygame.font.SysFont("arial", 30)
+    text_surface = font.render(question, True, BLACK)
+    text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, 200))
+    screen.blit(text_surface, text_rect)
+
+# Function to display options
+def display_options(screen, options):
+    font = pygame.font.SysFont("arial", 25)
+    for i, option in enumerate(options):
+        text_surface = font.render(option, True, BLACK)
+        text_rect = text_surface.get_rect(x=100, y=250 + i * 50)
+        screen.blit(text_surface, text_rect)
 
 def main():
     while True:
