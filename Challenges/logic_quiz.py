@@ -127,9 +127,9 @@ quiz.add_question("What comes after December?", ["A) November", "B) January", "C
 # print(f"Question number: {question_number}")
 # print("Question 1:", quiz.get_question(question_number))
 # Accessing the options for the first question
-#print("Options:", quiz.get_options(question_number))
+# print("Options:", quiz.get_options(question_number))
 # Accessing the correct answer for the first question
-# print("Correct Answer:", quiz1.get_correct_answer(question_number))
+# print("Correct Answer:", quiz.get_correct_answer(question_number))
 # print(f"There are {len(quiz1.questions)} questions available")
 # print(f"There are also {len(quiz1.answers)} correct answers available")
 
