@@ -34,6 +34,8 @@ start_button = Button(300, 200, 200, 50, "START", BLACK, 30, GREEN)
 select_player_button = Button(550, 250, 200, 50, "Select Player >>", BLACK, 30, DeepSkyBlue)
 exit_button = Button(300, 300, 200, 50, "EXIT", BLACK, 30, RED)
 
+
+
 def menu_screen():
     while True:
         for event in pygame.event.get():
@@ -74,7 +76,6 @@ def gameplay():
     spelling_button = Button(500, 200, 200, 50, "Spelling", BLACK, 30, GREEN)
     poem_button = Button(500, 300, 200, 50, "Poem", BLACK, 30, GREEN)
     misc_button = Button(500, 400, 200, 50, "Msic", BLACK, 30, GREEN)
-
 
       
     while True:
@@ -142,7 +143,21 @@ def question(title, quiz):
     TITLE = title
     score = 0
 
+    # Hangman images
+    hangman_images = [
+        pygame.image.load('images\\hangman\\hangman0.png'),
+        pygame.image.load('images\\hangman\\hangman1.png'),
+        pygame.image.load('images\\hangman\\hangman2.png'),
+        pygame.image.load('images\\hangman\\hangman3.png'),
+        pygame.image.load('images\\hangman\\hangman4.png'),
+        pygame.image.load('images\\hangman\\hangman5.png'),
+        pygame.image.load('images\\hangman\\hangman6.png')
+    ]
+
     font = pygame.font.SysFont("arial", 50)
+
+    def draw_hangman(screen, hangman_stage):
+        screen.blit(hangman_images[hangman_stage], (400, 150))
 
     def display_question(screen, title):
         global question_number  # Declare question_number as global
@@ -160,6 +175,7 @@ def question(title, quiz):
         options = load_random_options()
         correct_answer = load_correct_answer()
         score = 0
+        hangman_stage = 0
 
         # Display question
         question_text = font.render(question, True, WHITE)
@@ -191,18 +207,21 @@ def question(title, quiz):
                         option_rect = pygame.Rect(100, 150 + i*50, 600, 50)
                         if option_rect.collidepoint(mouse_pos):
                             print(correct_answer)
-                            if option == correct_answer:
-                                score += 1
-                                print("Correct!")
+                            if option != correct_answer:
+                                hangman_stage += 1
+                                print("InCorrect!")
                                 # Add your logic for correct answer here
-                            else:
-                                print("Incorrect!")
+                            if hangman_stage == len(hangman_images) - 1:
+                                # End game if hangman is fully built
+                                print("You lost!")
+                                return
+                            
                             # Load a new question
                             question_number = random.randint(0, 94)
                             question = load_random_question()
                             options = load_random_options()
                             correct_answer = load_correct_answer()
-                            screen.fill(BLACK)  # Clear the screen
+                            screen.fill(GRAY)  # Clear the screen
 
                             # Display new question
                             question_text = font.render(question, True, WHITE)
@@ -213,6 +232,8 @@ def question(title, quiz):
                                 option_text = font.render(option, True, WHITE)
                                 screen.blit(option_text, (100, option_y))
                                 option_y += 50
+                            # Draw hangman
+                            draw_hangman(screen, hangman_stage)
                             pygame.display.flip()
 
     print(score)
