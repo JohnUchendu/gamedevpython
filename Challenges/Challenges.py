@@ -10,21 +10,16 @@ class Challenge:
         self.answers = []
     @abstractmethod
     def add_question(self, question, options, correct_answer):
-        # self.questions.append(question)
-        # self.answers.append((options, correct_answer))
         pass
     @abstractmethod
     def get_question(self, index):
         pass
-        # return self.questions[index]
 
     @abstractmethod
     def get_options(self, index):
         pass
-        # return self.answers[index][0]
     @abstractmethod
     def get_correct_answer(self, index):
-        # return self.answers[index][1]
         pass
     
     def generate_challenge(self):

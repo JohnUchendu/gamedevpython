@@ -102,4 +102,4 @@ def question():
     # Call the function to display the question
     display_question(screen, "Quiz Game", load_random_question, load_random_options, load_correct_answer)
 
-question()
+print(question())

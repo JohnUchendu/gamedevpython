@@ -4,6 +4,7 @@ from Button import Button
 from Player.Player import Player
 from GameState.GameState import GameState
 from Challenges.logic_quiz import QuizQuestions
+from Challenges.puzzle_quiz import PuzzleQuestions
 import random
 
 
@@ -13,6 +14,7 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 DeepSkyBlue = (0, 191, 255)
 GREEN = (0, 255, 0)
+GRAY = (128, 128, 128)
 
 
 pygame.init()
@@ -24,7 +26,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Habit Hero Game")
 
 
-player = Player("Ekene-onwon")
+player = Player("Abraham")
 name = player.name
 game_state = GameState()
 
@@ -61,7 +63,7 @@ def menu_screen():
         pygame.display.update()
 
 def gameplay():
-
+    back_button = Button(20, 20, 100, 50, "Back", BLACK, 30, GRAY) 
     # Define challenge buttons
     select_level_button = Button(150, 20, 500, 50, "Please Select a level to Play", BLACK, 30, WHITE)
     logic_quiz_button = Button(100, 100, 200, 50, "Leve 1 Logic", BLACK, 30, GREEN)
@@ -73,6 +75,7 @@ def gameplay():
     poem_button = Button(500, 300, 200, 50, "Poem", BLACK, 30, GREEN)
     misc_button = Button(500, 400, 200, 50, "Msic", BLACK, 30, GREEN)
 
+
       
     while True:
         for event in pygame.event.get():
@@ -82,16 +85,17 @@ def gameplay():
             # We are going to add more event handling here for user input in challenges
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
+                if back_button.is_clicked(mouse_pos):
+                    game_state.change_state("menu")  # Change game state to "menu"
+                    return  # Return from the gameplay function
+                
                 if logic_quiz_button.is_clicked(mouse_pos):
                     print("You have selected to do logic quiz")
-                    question("level: logic Quiz")
-                    # Implement logic challenge
-                     # Draw question and options
-                    # if current_question is not None:
-                  
+                    question("level: logic Quiz", QuizQuestions)
+                
                 elif puzzle_button.is_clicked(mouse_pos):
-                    # Implement puzzle challenge
-                    pass
+                    print("You have selected to do logic quiz")
+                    question("level: Puzzle Quiz", PuzzleQuestions)
                 elif quantitative_button.is_clicked(mouse_pos):
                     # Implement quantitative challenge
                     pass
@@ -120,22 +124,12 @@ def gameplay():
         misc_button.draw(screen)
         poem_button.draw(screen)
 
-
-        # Draw more buttons as needed
-        # We will implement back  like this
-        back_button = Button(20, 20, 100, 50, "Go Back", BLACK, 30, GREEN)
-        # back_button = Button(20, 20, 100, 50, "Back", BLACK, 20)
-        # back_button.draw(screen)
-
-        #  # Draw question and options
-        # if current_question is not None:
-        #     display_question(screen, current_question)
-        #     display_options(screen, current_options)
+        back_button.draw(screen)
 
         pygame.display.update()
    
 
-def question(title):
+def question(title, quiz):
     # Set up the screen
     screen_width = 800
     screen_height = 600
@@ -144,20 +138,22 @@ def question(title):
     # Define colors
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
-    GREEN = (0, 255, 0)
-
-    quiz = QuizQuestions
+    GRAY = (128, 128, 128)
+    TITLE = title
+    score = 0
 
     font = pygame.font.SysFont("arial", 50)
 
-    def display_question(screen, title, load_question_func, load_options_func, load_answers_func):
+    def display_question(screen, title):
         global question_number  # Declare question_number as global
+
+        
+        back_button = Button(20, 20, 100, 50, "Back", GRAY, 30, RED) 
         # Set the window title
         pygame.display.set_caption(title)
-
-        # Fill the screen with black color to clear previous content
+        
         screen.fill(BLACK)
-
+        back_button.draw(screen)
         # Load random question, options, and answers
         question_number = random.randint(0, 94)  # Update question_number
         question = load_random_question()
@@ -187,6 +183,9 @@ def question(title):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
+                    if back_button.is_clicked(mouse_pos):
+                        game_state.change_state("menu")  # Change game state to "menu"
+                        return  # Return from the gameplay function
                     # Check if any option is clicked
                     for i, option in enumerate(options):
                         option_rect = pygame.Rect(100, 150 + i*50, 600, 50)
@@ -216,6 +215,8 @@ def question(title):
                                 option_y += 50
                             pygame.display.flip()
 
+    print(score)
+
     def load_random_question():
         question = quiz.get_question(question_number)
         print(question)
@@ -230,7 +231,7 @@ def question(title):
         return quiz.get_correct_answer(question_number)
 
     # Call the function to display the question
-    display_question(screen, "Quiz Game", load_random_question, load_random_options, load_correct_answer)
+    display_question(screen, TITLE)
 
 def main():
     while True:
