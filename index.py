@@ -163,7 +163,7 @@ def question(title, quiz):
         global question_number  # Declare question_number as global
 
         
-        back_button = Button(20, 20, 100, 50, "Back", GRAY, 30, RED) 
+        back_button = Button(20, 20, 100, 50, "Back", BLACK, 30, RED) 
         # Set the window title
         pygame.display.set_caption(title)
         
@@ -210,12 +210,10 @@ def question(title, quiz):
                             if option != correct_answer:
                                 hangman_stage += 1
                                 print("InCorrect!")
-                                # Add your logic for correct answer here
                             if hangman_stage == len(hangman_images) - 1:
                                 # End game if hangman is fully built
                                 print("You lost!")
                                 return
-                            
                             # Load a new question
                             question_number = random.randint(0, 94)
                             question = load_random_question()
@@ -223,6 +221,7 @@ def question(title, quiz):
                             correct_answer = load_correct_answer()
                             screen.fill(GRAY)  # Clear the screen
 
+                            back_button.draw(screen)
                             # Display new question
                             question_text = font.render(question, True, WHITE)
                             screen.blit(question_text, (50, 80))
