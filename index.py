@@ -5,6 +5,7 @@ from Player.Player import Player
 from GameState.GameState import GameState
 from Challenges.logic_quiz import QuizQuestions
 from Challenges.puzzle_quiz import PuzzleQuestions
+from Challenges.current_affair import CURRENTAFFAIRS
 import random
 
 
@@ -40,9 +41,29 @@ start_button = Button(50, 300, 150, 50, "START", WELCOME_SCREEN, 45, WHITE, WELC
 select_player_button = Button(250, 300, 330, 50, "SELECT PLAYER >>", WELCOME_SCREEN, 45, WHITE, WELCOME_SCREEN1)
 exit_button = Button(600, 300, 150, 50, "EXIT", WELCOME_SCREEN, 45, WHITE, WELCOME_SCREEN1)
 
-QUIT = pygame.image.load('images\\images\\quit.jpeg')
+yes_button = Button(600, 300, 150, 50, "NO", WELCOME_SCREEN, 45, RED, RED)
+no_button = Button(600, 300, 150, 50, "YES", WELCOME_SCREEN, 45, RED, RED)
+
+QUIT = pygame.image.load('assets\\images\\quit.jpeg')
+LOADING = pygame.image.load('assets\\images\\loading.jpeg')
+ZERO_HERO = pygame.image.load('assets\\images\\zero_to_hero.jpeg')
+MUSIC = pygame.mixer.music.load('assets\\audio\\superhero-trailer-110450.mp3')
+# Set the window icon
+icon = pygame.image.load('assets\\images\\icon.jpeg')
+pygame.display.set_icon(icon)
 
 def menu_screen():
+    quit_confirmation = False  # Flag to track whether the quit confirmation is active
+    
+     
+    screen.blit(LOADING, (0, 0))
+    pygame.display.update()
+    pygame.time.delay(2000)
+    screen.blit(ZERO_HERO, (0, 0))
+    pygame.mixer.music.play(-1)  # -1 loops the music indefinitely
+    pygame.display.update()
+    pygame.time.delay(2000)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEMOTION:
@@ -58,11 +79,9 @@ def menu_screen():
                     game_state.change_state("gameplay")
                     gameplay()
                 elif exit_button.is_clicked(mouse_pos):
-                    screen.blit(QUIT, (0, 0))  # Display the QUIT image
-                    pygame.display.update()
-                    pygame.time.delay(10000)  # Delay for 2 seconds
-                    # pygame.quit()
-                    # sys.exit()
+                    quit_confirmation = True 
+
+                    
 
         screen.fill(WELCOME_SCREEN)
         start_button.draw(screen)
@@ -82,6 +101,22 @@ def menu_screen():
         screen.blit(text1_surface, text1_rect)
         screen.blit(text2_surface, text2_rect)
 
+        # Quit confirmation logic
+        if quit_confirmation:
+            screen.blit(QUIT, (0, 0))  # Display the QUIT image
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    print(mouse_pos)
+                    # Check if the mouse click is within the specified area on the QUIT image
+                    if 246 <= mouse_pos[0] <= 428 and 436 <= mouse_pos[1] <= 491:
+                        pygame.quit()
+                        sys.exit()
+                    elif 446 <= mouse_pos[0] <= 466 and 436 <= mouse_pos[1] <= 491:
+                        return
+                    else:
+                        quit_confirmation = False  # Deactivate quit confirmation
+        # Stop playing background music
+        
         pygame.display.update()
 
 def gameplay():
@@ -129,6 +164,7 @@ def gameplay():
                 elif puzzle_button.is_clicked(mouse_pos):
                     print("You have selected to do logic quiz")
                     questions("level: Puzzle Quiz", PuzzleQuestions)
+                    
                 elif quantitative_button.is_clicked(mouse_pos):
                     # Implement quantitative challenge
                     pass
@@ -136,8 +172,8 @@ def gameplay():
                     # Implement rational challenge
                     pass
                 elif current_affairs_button.is_clicked(mouse_pos):
-                    # Implement current affairs challenge
-                    pass
+                    print("You have selected to do current affairs quiz")
+                    questions("level: Puzzle Quiz", CURRENTAFFAIRS)
                 elif spelling_button.is_clicked(mouse_pos):
                     # Implement spelling challenge
                     pass
@@ -182,16 +218,16 @@ def questions(title, quiz):
 
     # Hangman images
     hangman_images = [
-        pygame.image.load('images\\hangman\\hangman0.png'),
-        pygame.image.load('images\\hangman\\hangman1.png'),
-        pygame.image.load('images\\hangman\\hangman2.png'),
-        pygame.image.load('images\\hangman\\hangman3.png'),
-        pygame.image.load('images\\hangman\\hangman4.png'),
-        pygame.image.load('images\\hangman\\hangman5.png'),
-        pygame.image.load('images\\hangman\\hangman6.png')
+        pygame.image.load('assets\\hangman\\hangman0.png'),
+        pygame.image.load('assets\\hangman\\hangman1.png'),
+        pygame.image.load('assets\\hangman\\hangman2.png'),
+        pygame.image.load('assets\\hangman\\hangman3.png'),
+        pygame.image.load('assets\\hangman\\hangman4.png'),
+        pygame.image.load('assets\\hangman\\hangman5.png'),
+        pygame.image.load('assets\\hangman\\hangman6.png')
     ]
 
-    line = pygame.image.load('images\\lines\\line.png')
+    line = pygame.image.load('assets\\lines\\line.png')
     colored_line = line.copy()
     colored_line.fill(QUESTION_TEXT)
 
@@ -220,8 +256,8 @@ def questions(title, quiz):
     def display_question(screen, title):
         global question_number  # Declare question_number as global
 
-        back_button = Button(650, 500, 150, 50, "Quit", (150,180,140), 80, QUESTION_TEXT, RED) 
-        restart_button = Button(690, 20, 100, 50, "Restart", (134,180,140), 30, WHITE) 
+        back_button = Button(650, 530, 130, 50, "Quit", (150,180,140), 65, QUESTION_TEXT) 
+        restart_button = Button(450, 530, 165, 50, "Restart", (150,180,140), 65, QUESTION_TEXT) 
         # Set the window title
         pygame.display.set_caption(title)
         
