@@ -35,6 +35,28 @@ pygame.display.set_caption("Habit Hero Game")
 
 player = Player("")
 name = player.name
+
+# List of registered player names
+# Function to read player names from file
+def read_players_from_file(filename):
+    with open(filename, "r") as file:
+        players = [line.strip() for line in file]
+    return players
+
+# Read player names from file
+registered_players = read_players_from_file("Player\\players.txt")
+# Create buttons for registered players
+player_buttons = []
+for i, player_name in enumerate(registered_players):
+    button = Button(250, 150 + i * 50, 300, 40, player_name, WELCOME_SCREEN, 30, WHITE, WELCOME_SCREEN1)
+    player_buttons.append(button)
+
+# Input box for creating a new player
+input_box = pygame.Rect(250, 150 + len(registered_players) * 50, 300, 40)
+input_text = ""
+input_active = False
+
+
 game_state = GameState()
 
 start_button = Button(50, 300, 150, 50, "START", WELCOME_SCREEN, 45, WHITE, WELCOME_SCREEN1)
@@ -53,9 +75,10 @@ icon = pygame.image.load('assets\\images\\icon.jpeg')
 pygame.display.set_icon(icon)
 
 def menu_screen():
+    pygame.display.set_icon(icon)
     quit_confirmation = False  # Flag to track whether the quit confirmation is active
     
-     
+
     screen.blit(LOADING, (0, 0))
     pygame.display.update()
     pygame.time.delay(2000)
@@ -80,8 +103,11 @@ def menu_screen():
                     gameplay()
                 elif exit_button.is_clicked(mouse_pos):
                     quit_confirmation = True 
+                elif select_player_button.is_clicked(mouse_pos):
+                    game_state.change_state("select_player")
+                    player_selection_screen() # Return mouse position when select_player_button is clicked
 
-                    
+                        
 
         screen.fill(WELCOME_SCREEN)
         start_button.draw(screen)
@@ -383,14 +409,120 @@ def questions(title, quiz):
     # Call the function to display the question
     display_question(screen, TITLE)
 
+
+def player_selection_screen():
+    global input_active, input_text, player, name, registered_players, player_buttons
+
+
+    screen.fill(WELCOME_SCREEN)
+    font = pygame.font.SysFont(FAMILY, 60)
+    text_surface = font.render("Select Player", True, WHITE)
+    text_rect = text_surface.get_rect(midtop=(SCREEN_WIDTH // 2, 50))
+    screen.blit(text_surface, text_rect)
+
+    registered_players = read_players_from_file("Player\\players.txt")
+    if len(registered_players) > 3:
+        registered_players = registered_players[1]
+    # Create buttons for registered players
+    player_buttons = []
+    for i, player_name in enumerate(registered_players):
+        button = Button(250, 150 + i * 50, 300, 40, player_name, WELCOME_SCREEN, 30, WHITE, WELCOME_SCREEN1)
+        player_buttons.append(button)
+
+    for button in player_buttons:
+        button.draw(screen)
+
+    # Input box for creating a new player
+    pygame.draw.rect(screen, WHITE, input_box, 2)
+    font = pygame.font.Font(None, 32)
+    text_surface = font.render(input_text, True, WHITE)
+    screen.blit(text_surface, (input_box.x + 5, input_box.y + 5))
+
+    pygame.display.update()
+    input_active = True
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                for button in player_buttons:
+                    if button.is_clicked(mouse_pos):
+                        input_text = button.text
+                        screen.fill(WELCOME_SCREEN)
+                        for b in player_buttons:
+                            b.draw(screen)
+                        pygame.draw.rect(screen, WHITE, input_box, 2)
+                        text_surface = font.render(input_text, True, WHITE)
+                        screen.blit(text_surface, (input_box.x + 5, input_box.y + 5))
+                        pygame.display.update()
+                        # Return the selected player's name
+                        
+                        name = Player(button.text).name
+                        
+                        return name
+                if input_box.collidepoint(event.pos):
+                    # Toggle input box active
+                    input_active = not input_active
+                else:
+                    input_active = False
+            elif event.type == pygame.KEYDOWN:
+                if input_active:
+                    if event.key == pygame.K_RETURN:
+                        # Add the new player and clear the input box
+                        registered_players.append(input_text)
+                        
+                        input_text = ""
+                        # Move the input box down to make space for the new player button
+                        input_box.y += 50
+                        input_active = False
+                        # Return the entered player's name
+                        print(f"Just create a player {input_text}")
+                        write_players_to_file(input_text)
+                        return input_text
+                    elif event.key == pygame.K_BACKSPACE:
+                        input_text = input_text[:-1]
+                    else:
+                        input_text += event.unicode
+                    # Update the screen to reflect the changes in input text
+                    screen.fill(WELCOME_SCREEN)
+                    for button in player_buttons:
+                        button.draw(screen)
+                    pygame.draw.rect(screen, WHITE, input_box, 2)
+                    text_surface = font.render(input_text, True, WHITE)
+                    screen.blit(text_surface, (input_box.x + 5, input_box.y + 5))
+                    pygame.display.update()
+            elif event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+def write_players_to_file(player, filename ="Player\\players.txt"):
+    with open(filename, "a") as file:
+        for player in registered_players:
+            file.write(player + "\n")
+
 def main():
+    global player, name
     while True:
         if game_state.state == "menu":
             print(game_state.state)
-            menu_screen()
+            mouse_pos = menu_screen()
+            print(mouse_pos)  # Check if mouse position is returned
         elif game_state.state == "gameplay":
             print(game_state.state)
-            gameplay()
+            # gameplay()
+            
+            
+        # Player selection screen
+        if game_state.state == "select_player":
+            selected_player_name = player_selection_screen()
+            print("We just finished executing the player_selection_screen function")
+            if selected_player_name:
+                player = Player(selected_player_name)
+                name = player.name
+                print(f"Hello {name} from me")
+            else:
+                name = "Unknown Player"
+            game_state.change_state("gameplay")
 
 if __name__ == "__main__":
     main()
