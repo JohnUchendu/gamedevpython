@@ -56,7 +56,6 @@ input_box = pygame.Rect(250, 150 + len(registered_players) * 50, 300, 40)
 input_text = ""
 input_active = False
 
-
 game_state = GameState()
 
 start_button = Button(50, 300, 150, 50, "START", WELCOME_SCREEN, 45, WHITE, WELCOME_SCREEN1)
@@ -85,7 +84,7 @@ def menu_screen():
     screen.blit(ZERO_HERO, (0, 0))
     pygame.mixer.music.play(-1)  # -1 loops the music indefinitely
     pygame.display.update()
-    pygame.time.delay(2000)
+    pygame.time.delay(1500)
 
     while True:
         for event in pygame.event.get():
@@ -420,12 +419,10 @@ def player_selection_screen():
     text_rect = text_surface.get_rect(midtop=(SCREEN_WIDTH // 2, 50))
     screen.blit(text_surface, text_rect)
 
-    registered_players = read_players_from_file("Player\\players.txt")
-    if len(registered_players) > 3:
-        registered_players = registered_players[1]
+    registered_players = (read_players_from_file("Player\\players.txt"))
     # Create buttons for registered players
     player_buttons = []
-    for i, player_name in enumerate(registered_players):
+    for i, player_name in enumerate(set(registered_players)):
         button = Button(250, 150 + i * 50, 300, 40, player_name, WELCOME_SCREEN, 30, WHITE, WELCOME_SCREEN1)
         player_buttons.append(button)
 
