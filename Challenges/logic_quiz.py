@@ -5,10 +5,12 @@ import random
 class QuizQuestions(Challenge):
     questions = []
     answers = []
-    def __init__(self):
-        # self.questions = []
-        # self.answers = []
-        pass
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
 
     def add_question(question, options, correct_answer):
         QuizQuestions.questions.append(question)

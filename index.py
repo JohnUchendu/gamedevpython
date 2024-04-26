@@ -75,6 +75,7 @@ pygame.display.set_icon(icon)
 
 def menu_screen():
     pygame.display.set_icon(icon)
+    pygame.display.set_caption("Main Menu")
     quit_confirmation = False  # Flag to track whether the quit confirmation is active
     
 
@@ -145,6 +146,7 @@ def menu_screen():
         pygame.display.update()
 
 def gameplay():
+    pygame.display.set_caption("Game Menu")
     back_button = Button(100, 450, 100, 50, "BACK", SELECT_GAME, 30, WHITE, GRAY, 10) 
     # Define challenge buttons
     hero_button = Button(150, 60, 500, 50, "BE THE HERO TODAY", SELECT_GAME, 40, WHITE, SELECT_GAME, 16)
@@ -230,6 +232,7 @@ def gameplay():
    
 
 def questions(title, quiz):
+    pygame.display.set_caption(title)
     # Set up the screen
     screen_width = 800
     screen_height = 600
@@ -279,6 +282,7 @@ def questions(title, quiz):
         return lines
     
     def display_question(screen, title):
+        pygame.display.set_caption(title)
         global question_number  # Declare question_number as global
 
         back_button = Button(650, 530, 130, 50, "Quit", (150,180,140), 65, QUESTION_TEXT) 
@@ -410,6 +414,7 @@ def questions(title, quiz):
 
 
 def player_selection_screen():
+    pygame.display.set_caption("Select Player")
     global input_active, input_text, player, name, registered_players, player_buttons
 
 
@@ -493,7 +498,7 @@ def player_selection_screen():
                 sys.exit()
 
 def write_players_to_file(player, filename ="Player\\players.txt"):
-    with open(filename, "a") as file:
+    with open(filename, "w") as file:
         for player in registered_players:
             file.write(player + "\n")
 

@@ -1,0 +1,60 @@
+As a software engineer, it's beneficial to be familiar with various command-line tools and commands, as they can help you manage files, navigate directories, run scripts, and interact with your development environment more efficiently. Here's a list of commonly used command-line commands:
+
+1. Navigation:
+   - `cd`: Change directory.
+   - `dir` (Windows) / `ls` (Linux/Mac): List directory contents.
+   - `pwd`: Print working directory.
+
+2. File Management:
+   - `mkdir`: Create a directory.
+   - `rm` (Linux/Mac) / `del` (Windows): Remove/delete a file.
+   - `rmdir` (Linux/Mac) / `rd` (Windows): Remove/delete an empty directory.
+   - `mv` (Linux/Mac) / `move` (Windows): Move or rename files and directories.
+   - `cp` (Linux/Mac) / `copy` (Windows): Copy files and directories.
+
+3. File Manipulation:
+   - `cat`: Concatenate and display file content.
+   - `grep` (Linux/Mac) / `findstr` (Windows): Search for patterns in files.
+   - `touch`: Create an empty file or update timestamps.
+   - `head` / `tail`: Display the beginning or end of a file.
+   - `wc`: Count words, lines, or characters in a file.
+
+4. Text Editing:
+   - `nano` / `vim` / `emacs`: Terminal-based text editors (Linux/Mac).
+   - `notepad` / `edit` (Windows): Built-in text editors (Windows).
+
+5. System Information:
+   - `uname -a`: Display system information (Linux/Mac).
+   - `systeminfo`: Display system information (Windows).
+
+6. Process Management:
+   - `ps` (Linux/Mac) / `tasklist` (Windows): List running processes.
+   - `kill` (Linux/Mac) / `taskkill` (Windows): Terminate a process.
+
+7. Network Tools:
+   - `ping`: Send ICMP echo requests to a network host.
+   - `traceroute` (Linux/Mac) / `tracert` (Windows): Trace the route to a network host.
+   - `netstat`: Display network connections, routing tables, and interface statistics.
+
+8. Package/Dependency Management:
+   - `pip` (Python) / `npm` (Node.js) / `composer` (PHP): Package managers for installing and managing dependencies.
+   - `apt` (Debian/Ubuntu) / `yum` (Red Hat/CentOS) / `brew` (macOS): Package managers for installing software packages (Linux/Mac).
+
+9. Version Control:
+   - `git`: Version control system for tracking changes in source code.
+   - `svn`: Version control system (Subversion).
+
+10. Compression/Archiving:
+    - `zip` / `unzip`: Compress and decompress files in ZIP format.
+    - `tar` / `gzip` / `gunzip` (Linux/Mac) / `7z` (Windows): Create and extract compressed archives.
+
+11. Shell Scripting:
+    - `bash` / `sh`: Execute shell scripts.
+    - `chmod`: Change file permissions.
+    - `echo`: Display a line of text.
+
+12. Miscellaneous:
+    - `curl`: Transfer data from or to a server.
+    - `ssh`: Secure Shell for securely connecting to a remote server.
+    - `scp`: Securely copy files between computers.
+    - `wget`: Retrieve files from the web.
