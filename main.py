@@ -8,7 +8,6 @@ from Challenges.puzzle_quiz import PuzzleQuestions
 from Challenges.current_affair import CURRENTAFFAIRS
 import random
 
-
 # Define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -18,12 +17,11 @@ GREEN = (0, 255, 0)
 GRAY = (128, 128, 128)
 GRAY1 = (140, 140, 140)
 LIGHTBLUE = (134, 180, 152)
-SELECT_GAME = (26,  60,  62)
-WELCOME_SCREEN = (26,60,62)
-WELCOME_SCREEN1 = (26,50,62)
-GAME_BACK =  (134, 180, 152)
+SELECT_GAME = (26, 60, 62)
+WELCOME_SCREEN = (26, 60, 62)
+WELCOME_SCREEN1 = (26, 50, 62)
+GAME_BACK = (134, 180, 152)
 FAMILY = "BLANKA Font\\Blanka-Regular.otf"
-
 
 pygame.init()
 # The SetUp of our Game screen
@@ -31,7 +29,6 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Habit Hero Game")
-
 
 player = Player("")
 name = player.name
@@ -77,7 +74,6 @@ def menu_screen():
     pygame.display.set_icon(icon)
     pygame.display.set_caption("Main Menu")
     quit_confirmation = False  # Flag to track whether the quit confirmation is active
-    
 
     screen.blit(LOADING, (0, 0))
     pygame.display.update()
@@ -91,7 +87,7 @@ def menu_screen():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEMOTION:
                 mouse_pos = pygame.mouse.get_pos()
-                for button in [start_button,select_player_button,exit_button]:  # Assuming buttons_list contains instances of your Button class
+                for button in [start_button, select_player_button, exit_button]:  # Assuming buttons_list contains instances of your Button class
                     button.update_hover(mouse_pos)
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -102,12 +98,10 @@ def menu_screen():
                     game_state.change_state("gameplay")
                     gameplay()
                 elif exit_button.is_clicked(mouse_pos):
-                    quit_confirmation = True 
+                    quit_confirmation = True
                 elif select_player_button.is_clicked(mouse_pos):
                     game_state.change_state("select_player")
-                    player_selection_screen() # Return mouse position when select_player_button is clicked
-
-                        
+                    player_selection_screen()  # Return mouse position when select_player_button is clicked
 
         screen.fill(WELCOME_SCREEN)
         start_button.draw(screen)
@@ -118,7 +112,7 @@ def menu_screen():
         font = pygame.font.SysFont(FAMILY, 120)
         text1_surface = font.render(f"WELCOME BACK", True, WHITE)
         text2_surface = font.render(f"{name}", True, WHITE)
-        
+
         # Get the rects of the rendered texts
         text1_rect = text1_surface.get_rect(midtop=(SCREEN_WIDTH // 2, 100))
         text2_rect = text2_surface.get_rect(midtop=(SCREEN_WIDTH // 2, text1_rect.bottom + 10))
@@ -142,12 +136,11 @@ def menu_screen():
                     else:
                         quit_confirmation = False  # Deactivate quit confirmation
         # Stop playing background music
-        
         pygame.display.update()
 
 def gameplay():
     pygame.display.set_caption("Game Menu")
-    back_button = Button(100, 450, 100, 50, "BACK", SELECT_GAME, 30, WHITE, GRAY, 10) 
+    back_button = Button(100, 450, 100, 50, "BACK", SELECT_GAME, 30, WHITE, GRAY, 10)
     # Define challenge buttons
     hero_button = Button(150, 60, 500, 50, "BE THE HERO TODAY", SELECT_GAME, 40, WHITE, SELECT_GAME, 16)
     select_level_button = Button(150, 100, 500, 50, "SELECT TO PLAY", SELECT_GAME, 40, WHITE, SELECT_GAME, 16)
@@ -166,8 +159,7 @@ def gameplay():
     recitation_button = Button(250, 360, 135, 60, "Recite", GAME_BACK, 30, WHITE)
     personal_button = Button(400, 360, 135, 60, "Personal", GAME_BACK, 30, WHITE)
     nig_button = Button(550, 360, 135, 60, "Nigeria", GAME_BACK, 30, WHITE)
-    
-  
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -176,22 +168,25 @@ def gameplay():
             # We are going to add more event handling here for user input in challenges
             if event.type == pygame.MOUSEMOTION:
                 mouse_pos = pygame.mouse.get_pos()
-                for button in [hero_button,back_button, select_level_button,logic_quiz_button,puzzle_button,current_affairs_button,spelling_button,quantitative_button,poem_button,rational_button,misc_button,verbal_button,recitation_button,personal_button,nig_button]:  # Assuming buttons_list contains instances of your Button class
+                for button in [hero_button, back_button, select_level_button, logic_quiz_button, puzzle_button,
+                               current_affairs_button, spelling_button, quantitative_button, poem_button,
+                               rational_button, misc_button, verbal_button, recitation_button, personal_button,
+                               nig_button]:  # Assuming buttons_list contains instances of your Button class
                     button.update_hover(mouse_pos)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if back_button.is_clicked(mouse_pos):
                     game_state.change_state("menu")  # Change game state to "menu"
                     return  # Return from the gameplay function
-                
+
                 if logic_quiz_button.is_clicked(mouse_pos):
                     print("You have selected to do logic quiz")
                     questions("level: logic Quiz", QuizQuestions)
-                
+
                 elif puzzle_button.is_clicked(mouse_pos):
                     print("You have selected to do logic quiz")
                     questions("level: Puzzle Quiz", PuzzleQuestions)
-                    
+
                 elif quantitative_button.is_clicked(mouse_pos):
                     # Implement quantitative challenge
                     pass
@@ -206,10 +201,9 @@ def gameplay():
                     pass
                 # Add more elif conditions for other buttons
 
-
         screen.fill(SELECT_GAME)
         # We may draw challenges elements here
-         # Draw challenge buttons
+        # Draw challenge buttons
         select_level_button.draw(screen)
         hero_button.draw(screen)
         logic_quiz_button.draw(screen)
@@ -222,14 +216,13 @@ def gameplay():
         poem_button.draw(screen)
 
         verbal_button.draw(screen)
-        recitation_button.draw(screen) 
-        personal_button.draw(screen) 
+        recitation_button.draw(screen)
+        personal_button.draw(screen)
         nig_button.draw(screen)
 
         back_button.draw(screen)
 
         pygame.display.update()
-   
 
 def questions(title, quiz):
     pygame.display.set_caption(title)
@@ -240,7 +233,7 @@ def questions(title, quiz):
     pygame.display.set_caption(title)
     WHITE = (255, 255, 255)
     TITLE = title
-    QUESTION_TEXT =  (25, 62, 54)
+    QUESTION_TEXT = (25, 62, 54)
     QUESTION_BACHGROUND = (134, 180, 152)
     score = 0
 
@@ -280,20 +273,20 @@ def questions(title, quiz):
                 current_line = word + ' '
         lines.append(current_line.rstrip())
         return lines
-    
+
     def display_question(screen, title):
         pygame.display.set_caption(title)
         global question_number  # Declare question_number as global
 
-        back_button = Button(650, 530, 130, 50, "Quit", (150,180,140), 65, QUESTION_TEXT) 
-        restart_button = Button(450, 530, 165, 50, "Restart", (150,180,140), 65, QUESTION_TEXT) 
+        back_button = Button(650, 530, 130, 50, "Quit", (150, 180, 140), 65, QUESTION_TEXT)
+        restart_button = Button(450, 530, 165, 50, "Restart", (150, 180, 140), 65, QUESTION_TEXT)
         # Set the window title
         pygame.display.set_caption(title)
-        
+
         screen.fill(QUESTION_BACHGROUND)
         back_button.draw(screen)
         restart_button.draw(screen)
-        
+
         # Load random question, options, and answers
         question_number = random.randint(0, 94)  # Update question_number
         question = load_random_question()
@@ -337,7 +330,7 @@ def questions(title, quiz):
 
                 if event.type == pygame.MOUSEMOTION:
                     mouse_pos = pygame.mouse.get_pos()
-                    for button in [restart_button,back_button]:  # Assuming buttons_list contains instances of your Button class
+                    for button in [restart_button, back_button]:  # Assuming buttons_list contains instances of your Button class
                         button.update_hover(mouse_pos)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
@@ -351,15 +344,17 @@ def questions(title, quiz):
                     # Restart the game by resetting the game state and reloading a new question
                     # Check if any option is clicked
                     for i, option in enumerate(options):
-                        option_rect = pygame.Rect(350, 300 + i*50, 600, 50)
+                        option_rect = pygame.Rect(350, 300 + i * 50, 600, 50)
                         if option_rect.collidepoint(mouse_pos):
                             print(correct_answer)
                             if option != correct_answer:
                                 hangman_stage += 1
                                 print("InCorrect!")
+                            else:
+                                score += 1
                             if hangman_stage == len(hangman_images) - 1:
                                 # End game if hangman is fully built
-                                print("You lost!")
+                                game_over_screen(screen, score)
                                 return
                             # Load a new question
                             question_number = random.randint(0, 94)
@@ -379,7 +374,7 @@ def questions(title, quiz):
                                 question_text = question_font.render(line, True, QUESTION_TEXT)
                                 screen.blit(question_text, (360, question_y))
                                 question_y += 30
-                            
+
                             # Display new options
                             option_y = 300
                             for option in options:
@@ -390,7 +385,7 @@ def questions(title, quiz):
                             # Draw hangman
                             hangman_text = font.render("HANGMAN", True, QUESTION_TEXT)
                             screen.blit(hangman_text, (20, 80))
-                            
+
                             draw_hangman(screen, hangman_stage)
                             pygame.display.flip()
 
@@ -402,7 +397,7 @@ def questions(title, quiz):
         return question
 
     def load_random_options():
-        options =  quiz.get_options(question_number)
+        options = quiz.get_options(question_number)
         print(options)
         return options
 
@@ -411,6 +406,49 @@ def questions(title, quiz):
 
     # Call the function to display the question
     display_question(screen, TITLE)
+
+
+def game_over_screen(screen, score):
+    """Display the game over screen."""
+    screen.fill(WELCOME_SCREEN)
+
+    font = pygame.font.Font(None, 80)
+    text_surface = font.render("Game OVER", True, WHITE)
+    text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
+    screen.blit(text_surface, text_rect)
+
+    font = pygame.font.Font(None, 50)
+    text_surface = font.render(f"Score: {score}", True, WHITE)
+    text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+    screen.blit(text_surface, text_rect)
+
+    # Replay button
+    replay_button = Button(300, 400, 200, 50, "Replay", GRAY, 40, WHITE, GRAY1)
+    replay_button.draw(screen)
+
+    # Exit button
+    exit_button = Button(300, 500, 200, 50, "Exit", GRAY, 40, WHITE, GRAY1)
+    exit_button.draw(screen)
+
+    pygame.display.flip()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if replay_button.is_clicked(mouse_pos):
+                    print("Replay button clicked")
+                    # Call the function to restart the game
+                    return "replay"
+                elif exit_button.is_clicked(mouse_pos):
+                    print("Exit button clicked")
+                    # Exit the game
+                    pygame.quit()
+                    sys.exit()
+
 
 
 def player_selection_screen():
@@ -477,15 +515,11 @@ def player_selection_screen():
                     text_surface = font.render(input_text, True, WHITE)
                     screen.blit(text_surface, (input_box.x + 5, input_box.y + 5))
                     pygame.display.update()
+
             elif event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-
-# def write_players_to_file(player, filename ="Player\\players.txt"):
-#     with open(filename, "w") as file:
-#         for player in registered_players:
-#             file.write(player + "\n")
 
 def write_players_to_file(player, filename ="Player\\players.txt"):
      with open(filename, "r") as file:

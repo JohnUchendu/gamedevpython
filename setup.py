@@ -19,6 +19,7 @@ cx_Freeze.setup(
         "build_exe": {
             "packages": ["pygame"],
             "include_files": [
+                
                 'Player',
                 'assets',
                 'assets/images',
@@ -38,7 +39,7 @@ cx_Freeze.setup(
                 'assets/lines/line.png',
                 'BLANKA Font/Blanka-Regular.otf',
                 'Player/players.txt',
-                'post_install_script.py'
+                'post_install.py'
             ]
         }
     },
