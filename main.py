@@ -298,7 +298,7 @@ def questions(title, quiz):
         draw_hangman(screen, hangman_stage)
 
         # Display question
-        font = pygame.font.SysFont(FAMILY, 50)
+        font = pygame.font.SysFont(FAMILY, 35)
         question_lines = wrap_text(question, 400, font)
         question_height = len(question_lines) * 30  # Height per line
         question_y = 150  # Adjusted position for question text
@@ -366,7 +366,7 @@ def questions(title, quiz):
                             back_button.draw(screen)
                             restart_button.draw(screen)
                             # Display new question  Wrap the question text
-                            question_font = pygame.font.SysFont(FAMILY, 50)
+                            question_font = pygame.font.SysFont(FAMILY, 35)
                             question_lines = wrap_text(question, 400, question_font)
                             question_height = len(question_lines) * 30  # Height per line
                             question_y = 150  # Adjusted position for question text
