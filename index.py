@@ -417,16 +417,16 @@ def player_selection_screen():
     pygame.display.set_caption("Select Player")
     global input_active, input_text, player, name, registered_players, player_buttons
 
-
     screen.fill(WELCOME_SCREEN)
     font = pygame.font.SysFont(FAMILY, 60)
     text_surface = font.render("Select Player", True, WHITE)
     text_rect = text_surface.get_rect(midtop=(SCREEN_WIDTH // 2, 50))
     screen.blit(text_surface, text_rect)
 
-    registered_players = (read_players_from_file("Player\\players.txt"))
+    registered_players = read_players_from_file("Player\\players.txt")
+    player_buttons = []  # Clear the existing player buttons list
+
     # Create buttons for registered players
-    player_buttons = []
     for i, player_name in enumerate(set(registered_players)):
         button = Button(250, 150 + i * 50, 300, 40, player_name, WELCOME_SCREEN, 30, WHITE, WELCOME_SCREEN1)
         player_buttons.append(button)
@@ -450,20 +450,9 @@ def player_selection_screen():
                 for button in player_buttons:
                     if button.is_clicked(mouse_pos):
                         input_text = button.text
-                        screen.fill(WELCOME_SCREEN)
-                        for b in player_buttons:
-                            b.draw(screen)
-                        pygame.draw.rect(screen, WHITE, input_box, 2)
-                        text_surface = font.render(input_text, True, WHITE)
-                        screen.blit(text_surface, (input_box.x + 5, input_box.y + 5))
-                        pygame.display.update()
-                        # Return the selected player's name
-                        
-                        name = Player(button.text).name
-                        
-                        return name
+                        name = input_text  # Update the selected player name
+                        return name  # Return the selected player's name
                 if input_box.collidepoint(event.pos):
-                    # Toggle input box active
                     input_active = not input_active
                 else:
                     input_active = False
@@ -472,20 +461,15 @@ def player_selection_screen():
                     if event.key == pygame.K_RETURN:
                         # Add the new player and clear the input box
                         registered_players.append(input_text)
-                        
-                        input_text = ""
-                        # Move the input box down to make space for the new player button
-                        input_box.y += 50
+                        write_players_to_file(input_text)  # Write the new player to file
+                        input_box.y += 50  # Move the input box down
                         input_active = False
-                        # Return the entered player's name
-                        print(f"Just create a player {input_text}")
-                        write_players_to_file(input_text)
-                        return input_text
+                        name = input_text  # Update the selected player name
+                        return name  # Return the selected player's name
                     elif event.key == pygame.K_BACKSPACE:
                         input_text = input_text[:-1]
                     else:
                         input_text += event.unicode
-                    # Update the screen to reflect the changes in input text
                     screen.fill(WELCOME_SCREEN)
                     for button in player_buttons:
                         button.draw(screen)
@@ -497,31 +481,46 @@ def player_selection_screen():
                 pygame.quit()
                 sys.exit()
 
-def write_players_to_file(player, filename ="Player\\players.txt"):
-    with open(filename, "w") as file:
-        for player in registered_players:
-            file.write(player + "\n")
 
+# def write_players_to_file(player, filename ="Player\\players.txt"):
+#     with open(filename, "w") as file:
+#         for player in registered_players:
+#             file.write(player + "\n")
+
+def write_players_to_file(player, filename ="Player\\players.txt"):
+     with open(filename, "r") as file:
+        players = [line.strip() for line in file]
+        if len(players) >= 4:
+            with open(filename, "w") as file:
+                    file.write(player)
+        else:
+            with open(filename, "a") as file:
+                    file.write("\n" + player)
+                    
 def main():
     global player, name
+
+    # Randomly select a player from the list of available players
+    selected_player_name = random.choice(read_players_from_file("Player\\players.txt"))
+    player = Player(selected_player_name)
+    name = player.name
+
     while True:
         if game_state.state == "menu":
-            print(game_state.state)
             mouse_pos = menu_screen()
-            print(mouse_pos)  # Check if mouse position is returned
+            if mouse_pos:  # Check if mouse position is returned
+                # If the player changes during menu screen, update the selected player
+                player = Player(name)
         elif game_state.state == "gameplay":
-            print(game_state.state)
-            # gameplay()
-            
+            # Add code here to handle gameplay
+            pass
             
         # Player selection screen
         if game_state.state == "select_player":
             selected_player_name = player_selection_screen()
-            print("We just finished executing the player_selection_screen function")
             if selected_player_name:
                 player = Player(selected_player_name)
                 name = player.name
-                print(f"Hello {name} from me")
             else:
                 name = "Unknown Player"
             game_state.change_state("gameplay")
